@@ -12,29 +12,33 @@ namespace sjtu
 {
     
     template <class T> class Array {
-        int N, M;
-        T* a;
-      
     public:
+        int N, M, sz;
+        T* a;
         Array() {
             
         }
         Array(int n, int m) {
             N = n;
             M = m;
-            a = (T*)malloc(n * m * sizeof(T));
+            sz = N * M;
+            a = (T*)malloc(N * M * sizeof(T));
         }
-        
-    public:
         T& element(int i, int j) {
-            return a[i * N + j];
+            return a[i * M + j];
         }
         const T& element(int i, int j) const {
-            return a[i * N + j];
+            return a[i * M + j];
         }
         void resize(int n, int m) {
             N = n;
             M = m;
+        }
+        void print(){
+            for (int i = 0; i < sz; i++) {
+                std::cout << a[i] << " ";
+            }
+            std::cout << std::endl << std::endl;
         }
         
     };
@@ -75,6 +79,7 @@ namespace sjtu
                     a.element(i, j) = *cur;
                 }
             }
+            a.print();
         }
         
 //        3.2 GETTING ELEMENT
@@ -107,6 +112,28 @@ namespace sjtu
         
 //        3.3.2 BINARY OPERATORS
     public:
+        
+//        3.5 OTHERS
+    public:
+        void resize(std::size_t n, std::size_t m, T _init = T()) {
+            a.print();
+            N = (int)n;
+            M = (int)m;
+            a.print();
+            if(a.sz < n * m) {
+                Array<T> b = Array<T>(N, M);
+                a.print();
+                for (int i = 0; i < a.sz; i++) {
+                    b.a[i] = a.a[i];
+                }
+                for (int i = a.sz; i < b.sz; i++) {
+                    b.a[i] = _init;
+                }
+                b.print();
+                free(a.a);
+                a = b;
+            }
+        }
         
 //        UTILITY
         void print() {

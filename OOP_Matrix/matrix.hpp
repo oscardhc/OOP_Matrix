@@ -69,6 +69,7 @@ namespace sjtu
             }
         }
         Matrix(std::initializer_list< std::initializer_list<T> > list) {
+            std::cout << "TYPENAME: " << typeid(T).name() << std::endl;
             N = (int)list.size();
             M = (int)list.begin() -> size();
             a = Array<T>(N, M);
@@ -108,28 +109,46 @@ namespace sjtu
         
 //        3.3.1 UNARY OPERATORS
     public:
-        
+        Matrix operator - () const {
+            Matrix<T> ret = Matrix<T>(N, M);
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    ret.a.element(i, j) = -a.element(i, j);
+                }
+            }
+            return ret;
+        }
+        template <class U> Matrix& operator -= (const Matrix<U> b) {
+            if (typeid(T).name()[0] == 'i' && typeid(U).name()[0] == 'd') {
+                Matrix<double> ret = Matrix<double>(N, M);
+                for (int i = 0; i < N; i++) {
+                    for (int j = 0; j < M; j++) {
+                        ret.a.element(i, j) = (double)a.element(i, j) - b(i, j);
+                    }
+                }
+                return ret;
+            } else {
+                return this;
+            }
+        }
         
 //        3.3.2 BINARY OPERATORS
     public:
         
+        
 //        3.5 OTHERS
     public:
         void resize(std::size_t n, std::size_t m, T _init = T()) {
-            a.print();
             N = (int)n;
             M = (int)m;
-            a.print();
             if(a.sz < n * m) {
                 Array<T> b = Array<T>(N, M);
-                a.print();
                 for (int i = 0; i < a.sz; i++) {
                     b.a[i] = a.a[i];
                 }
                 for (int i = a.sz; i < b.sz; i++) {
                     b.a[i] = _init;
                 }
-                b.print();
                 free(a.a);
                 a = b;
             }

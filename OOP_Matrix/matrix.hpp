@@ -119,14 +119,12 @@ namespace sjtu
             return ret;
         }
         template <class U> Matrix& operator -= (const Matrix<U> b) {
-            Matrix<double> ret = Matrix<double>(N, M);
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < M; j++) {
                     a.element(i, j) -= (T)b(i, j);
-                    ret.a.element(i, j) = a.element(i, j);
                 }
             }
-            return ret;
+            return *this;
         }
         
 //        3.3.2 BINARY OPERATORS

@@ -17,11 +17,12 @@ int main(int argc, const char * argv[]) {
 //    mat.print();
     mat(1,1) = 100;
     mat.resize(5, 5, 233);
-    (-mat).print();
     
     sjtu::Matrix<double> hhh = {{12.5,2.5,3},{2,3,4},{3,4,5},{4,5,6}};
+    hhh.resize(5, 5, 233);
     
     (hhh -= mat).print();
+//    (mat -= hhh).print();
     
     return 0;
 }

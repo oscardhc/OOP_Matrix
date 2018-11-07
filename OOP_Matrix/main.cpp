@@ -27,8 +27,8 @@ int main(int argc, const char * argv[]) {
     
 //    auto c = hhh - mat;
 //    c.print();
-    (mat * hhh).print();
-    (hhh * mat).print();
+    (mat*hhh).print();
+    (hhh*mat).print();
     
 //    hhh.trans().print();
     

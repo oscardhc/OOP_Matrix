@@ -28,96 +28,6 @@
 //                          \\\=.............=///
 //                               ===========
 
-
-//                                    //==\\
-//                                   /.....|
-//                                  |......|
-//                                  |......|         ==\
-//     //=...\\\=......=========    |...../       /....\|
-//   //........\\................===\\..//       /......|
-// //...........||......./===\........\\\\      |......|
-// ||.@@.........|.....//     \\..........\\\  |....../
-// |........@@..||.....|   @@  |.//   \\\....=\|\...//
-// ||.........../......\\  @  //||      ||.......\\\
-//  \\........//.........\===/..||  @@@ ||..........\\
-//    \\====//...................\\\ =///............\\
-//       \\\...........................................\\
-//         \\\..........................................\\
-//            \\\\..............................!!!!!....|
-//                ||..........................!!!!!!!!!..||
-//                |..........................!!!!!!!!!!!..|
-//                |....|.....................!!!!!!!!!!!..|
-//                |..........................!!!!!!!!!!...|
-//                ||....\\....................!!!!!!!....||
-//                 |......\\........../..................|
-//                 \\.......\======/....................//
-//                  \\.................................//
-//                    \\.............................//
-//                     \\...........................//
-//                       \\\.....................///
-//                          \\\=.............=///
-//                               ===========
-
-
-//                                    //==\\
-//                                   /.....|
-//                                  |......|
-//                                  |......|         ==\
-//     //=...\\\=......=========    |...../       /....\|
-//   //........\\................===\\..//       /......|
-// //...........||......./===\........\\\\      |......|
-// ||.@@.........|.....//     \\..........\\\  |....../
-// |........@@..||.....|   @@  |.//   \\\....=\|\...//
-// ||.........../......\\  @  //||      ||.......\\\
-//  \\........//.........\===/..||  @@@ ||..........\\
-//    \\====//...................\\\ =///............\\
-//       \\\...........................................\\
-//         \\\..........................................\\
-//            \\\\..............................!!!!!....|
-//                ||..........................!!!!!!!!!..||
-//                |..........................!!!!!!!!!!!..|
-//                |....|.....................!!!!!!!!!!!..|
-//                |..........................!!!!!!!!!!...|
-//                ||....\\....................!!!!!!!....||
-//                 |......\\........../..................|
-//                 \\.......\======/....................//
-//                  \\.................................//
-//                    \\.............................//
-//                     \\...........................//
-//                       \\\.....................///
-//                          \\\=.............=///
-//                               ===========
-
-
-//                                    //==\\
-//                                   /.....|
-//                                  |......|
-//                                  |......|         ==\
-//     //=...\\\=......=========    |...../       /....\|
-//   //........\\................===\\..//       /......|
-// //...........||......./===\........\\\\      |......|
-// ||.@@.........|.....//     \\..........\\\  |....../
-// |........@@..||.....|   @@  |.//   \\\....=\|\...//
-// ||.........../......\\  @  //||      ||.......\\\
-//  \\........//.........\===/..||  @@@ ||..........\\
-//    \\====//...................\\\ =///............\\
-//       \\\...........................................\\
-//         \\\..........................................\\
-//            \\\\..............................!!!!!....|
-//                ||..........................!!!!!!!!!..||
-//                |..........................!!!!!!!!!!!..|
-//                |....|.....................!!!!!!!!!!!..|
-//                |..........................!!!!!!!!!!...|
-//                ||....\\....................!!!!!!!....||
-//                 |......\\........../..................|
-//                 \\.......\======/....................//
-//                  \\.................................//
-//                    \\.............................//
-//                     \\...........................//
-//                       \\\.....................///
-//                          \\\=.............=///
-//                               ===========
-
 #ifndef SJTU_MATRIX_HPP
 #define SJTU_MATRIX_HPP
 
@@ -125,80 +35,56 @@
 #include <initializer_list>
 #include <utility>
 #include <iterator>
+#include <cassert>
 
 using std::size_t;
 
 namespace sjtu
 {
-    
-    template <class T> class Array {
-    public:
-        int N, M, sz;
-        T* a;
-        Array() {
-            
-        }
-        Array(int n, int m) {
-            N = n;
-            M = m;
-            sz = N * M;
-            a = (T*)malloc(N * M * sizeof(T));
-        }
-        T& operator() (int i, int j) {
-            return a[i * M + j];
-        }
-        const T& operator() (int i, int j) const {
-            return a[i * M + j];
-        }
-        void resize(int n, int m) {
-            N = n;
-            M = m;
-        }
-        void print(){
-            for (int i = 0; i < sz; i++) {
-                std::cout << a[i] << " ";
-            }
-            std::cout << std::endl << std::endl;
-        }
-        
-    };
-    
     template <class T> class Matrix {
     private:
         int N, M;
-        Array<T> ar;
-        void initMat() {
-            
-        }
-        void freeSpace() {
-        }
-    
+        T* ar;
+        
     public:
-        int columnCnt() const {
-            return M;
-        }
-        int rowCnt() const {
+        size_t rowLength() const {
             return N;
         }
+        size_t columnLength() const {
+            return M;
+        }
+        size_t size() const {
+            return N * M;
+        }
         T& operator() (std::size_t i, std::size_t j) {
-            return ar((int)i, (int)j);
+            return ar[i * M + j];
         }
         const T& operator()(std::size_t i, std::size_t j) const {
-            return ar((int)i, (int)j);
+            return ar[i * M + j];
         }
         
 //    3.1 INITIALIZATION
     public:
-        Matrix() {
-            
-        }
-        Matrix(std::size_t n, std::size_t m, T init = T()) {
+        Matrix() = default;
+        Matrix(std::size_t n, std::size_t m, T _init = T()) {
             N = (int)n;
             M = (int)m;
-            ar = Array<T>(N, M);
+            ar = new T[N * M];
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < M; j++) {
-                    (*this)(i, j) = init;
+                    (*this)(i, j) = _init;
+                }
+            }
+            std::cout << "NEWING ... " << N << " " << M << std::endl;
+            print();
+        }
+        explicit Matrix(std::pair<size_t, size_t> sz, T _init = T()) {
+            N = (int)sz.first;
+            M = (int)sz.second;
+            ar = new T[N * M];
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    (*this)(i, j) = _init;
                 }
             }
         }
@@ -206,7 +92,7 @@ namespace sjtu
             std::cout << "TYPENAME: " << typeid(T).name() << std::endl;
             N = (int)list.size();
             M = (int)list.begin() -> size();
-            ar = Array<T>(N, M);
+            ar = new T[N * M];
             auto curRow = list.begin();
             for (int i = 0; i < N; i++, curRow++) {
                 auto cur = curRow -> begin();
@@ -214,7 +100,51 @@ namespace sjtu
                     (*this)(i, j) = *cur;
                 }
             }
-            ar.print();
+        }
+        Matrix(const Matrix &o) {
+            N = (int)o.rowLength();
+            M = (int)o.columnLength();
+            ar = new T[N * M];
+            for (int i = 0; i < N * M; i++) {
+                ar[i] = o.ar[i];
+            }
+        }
+        template <class U> Matrix(const Matrix<U> &o) {
+            N = (int)o.rowLength();
+            M = (int)o.columnLength();
+            ar = new T[N * M];
+            for (int i = 0; i < N * M; i++) {
+                ar[i] = (T)o.ar[i];
+            }
+        }
+        Matrix &operator = (const Matrix &o) {
+            (*this) = Matrix(o);
+            return *this;
+        }
+        template <class U> Matrix &operator = (const Matrix<U> &o) {
+            (*this) = Matrix(o);
+            return *this;
+        }
+        Matrix(Matrix &&o) noexcept {
+            N = o.N;
+            M = o.M;
+            delete [] ar;
+            ar = o.ar;
+        }
+        Matrix &operator = (Matrix &&o) noexcept {
+            N = o.N;
+            M = o.M;
+            delete [] ar;
+            ar = o.ar;
+            return *this;
+        }
+        ~Matrix() {
+            std::cout << "TRYING TO DESTROY ... " << N << " " << M << std::endl;
+            print();
+            if (ar != NULL) {
+                delete [] ar;
+                ar = NULL;
+            }
         }
         
 //        3.2 GETTING ELEMENT
@@ -310,11 +240,11 @@ namespace sjtu
             }
             return ret;
         }
-        template <class U> Matrix<decltype(T() * U())> operator * (const Matrix<U> b) const {
-            assert(M == b.rowCnt());
-            Matrix<decltype(T() * U())> ret = Matrix<decltype(T() * U())>(N, b.columnCnt());
+        template <class U> Matrix<decltype(T() * U())> operator * (const Matrix<U> &b) const {
+            assert(M == b.rowLength());
+            Matrix<decltype(T() * U())> ret = Matrix<decltype(T() * U())>(N, b.columnLength());
             for (int i = 0; i < N; i++) {
-                for (int j = 0; j < b.columnCnt(); j++) {
+                for (int j = 0; j < b.columnLength(); j++) {
                     for (int k = 0; k < M; k++) {
                         ret(i, j) += (*this)(i, k) * b(k, j);
                     }
@@ -326,19 +256,19 @@ namespace sjtu
 //        3.5 OTHERS
     public:
         void resize(std::size_t n, std::size_t m, T _init = T()) {
-            N = (int)n;
-            M = (int)m;
-            if(ar.sz < n * m) {
-                Array<T> b = Array<T>(N, M);
-                for (int i = 0; i < ar.sz; i++) {
-                    b.a[i] = ar.a[i];
+            if (M * N < n * m) {
+                T* b = new T[n * m];
+                for (int i = 0; i < M * N; i++) {
+                    b[i] = ar[i];
                 }
-                for (int i = ar.sz; i < b.sz; i++) {
-                    b.a[i] = _init;
+                for (int i = M * N; i < n * m; i++) {
+                    b[i] = _init;
                 }
-                free(ar.a);
+                delete [] ar;
                 ar = b;
             }
+            N = (int)n;
+            M = (int)m;
         }
         void resize(std::pair<std::size_t, std::size_t> sz, T _init = T()) {
             resize(sz.first, sz.second, _init);
@@ -346,11 +276,13 @@ namespace sjtu
         
 //        UTILITY
         void print() {
+            std::cout << "{";
             for (int i = 0; i < N; i++) {
+                std::cout << "{" ;
                 for (int j = 0; j < M; j++) {
-                    std::cout << ar(i, j) << " ";
+                    std::cout << (*this)(i, j) << (j == M-1 ? "": ",");
                 }
-                std::cout << std::endl;
+                std::cout << "}" << (i == N-1 ? "}" : ",")  << std::endl;
             }
             std::cout << std::endl;
         }

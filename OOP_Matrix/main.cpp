@@ -17,17 +17,17 @@ int main(int argc, const char * argv[]) {
 //    mat.print();
     mat(1,1) = 100;
     mat.resize(4, 5, 233);
+    mat.print();
     
     sjtu::Matrix<double> hhh = {{12.5,2.5,3},{2,3,4},{3,4,5},{4,5,6}};
-    hhh.resize(4, 5, 666);
+    hhh.resize(5, 4, 666);
+    hhh.print();
     
 //    hhh.print();
     
-    hhh.print()
-    
-    (hhh - mat).print();
-    
-    hhh.print();
+//    auto c = hhh - mat;
+//    c.print();
+    (hhh * mat).print();
     
 //    hhh.trans().print();
     

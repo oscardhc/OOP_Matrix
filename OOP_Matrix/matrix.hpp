@@ -174,6 +174,12 @@ namespace sjtu
         }
     
     public:
+        int columnCnt() const {
+            return M;
+        }
+        int rowCnt() const {
+            return N;
+        }
         T& operator() (std::size_t i, std::size_t j) {
             return ar((int)i, (int)j);
         }
@@ -243,9 +249,7 @@ namespace sjtu
         template <class U> Matrix& operator += (const Matrix<U> b) {
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < M; j++) {
-                    (*this)(i, j) += (T)b(i, j);
-//                     += (T)b(i,j);
-                }
+                    (*this)(i, j) += (T)b(i, j);                }
             }
             return *this;
         }
@@ -282,11 +286,41 @@ namespace sjtu
             return true;
         }
         template <class U> bool operator != (const Matrix<U> b) {
-            return (*this) != b;
+            return !((*this) == b);
         }
-        template <class U> Matrix operator - (const Matrix<U> b) {
-            Matrix<T> ret = (*this);
-            return ret -= b;
+        template <class U> Matrix<decltype(T() + U())> operator + (const Matrix<U> &b) const {
+            assert(N == b.rowCnt() && M == b.columnCnt());
+            Matrix<decltype(T() + U())> ret = Matrix<decltype(T() + U())>(N, M);
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    ret(i, j) = (*this)(i, j) + b(i, j);
+                }
+            }
+            return ret;
+        }
+        template <class U> Matrix<decltype(T() + U())> operator - (const Matrix<U> &b) const {
+            return (*this) + (-b);
+        }
+        template <class U> Matrix<decltype(T() * U())> operator * (const U b) const {
+            Matrix<decltype(T() * U())> ret = Matrix<decltype(T() * U())>(N, M);
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    ret(i, j) = (*this)(i, j) * b(i, j);
+                }
+            }
+            return ret;
+        }
+        template <class U> Matrix<decltype(T() * U())> operator * (const Matrix<U> b) const {
+            assert(M == b.rowCnt());
+            Matrix<decltype(T() * U())> ret = Matrix<decltype(T() * U())>(N, b.columnCnt());
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < b.columnCnt(); j++) {
+                    for (int k = 0; k < M; k++) {
+                        ret(i, j) += (*this)(i, k) * b(k, j);
+                    }
+                }
+            }
+            return ret;
         }
         
 //        3.5 OTHERS
@@ -306,6 +340,9 @@ namespace sjtu
                 ar = b;
             }
         }
+        void resize(std::pair<std::size_t, std::size_t> sz, T _init = T()) {
+            resize(sz.first, sz.second, _init);
+        }
         
 //        UTILITY
         void print() {
@@ -315,8 +352,10 @@ namespace sjtu
                 }
                 std::cout << std::endl;
             }
+            std::cout << std::endl;
         }
     };
+    
 }
 
 #endif //SJTU_MATRIX_HPP

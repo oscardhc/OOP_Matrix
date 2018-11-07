@@ -29,7 +29,6 @@
 		55201D96218D869D002DA78F /* AdvanceTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdvanceTest.cpp; sourceTree = "<group>"; };
 		55201D99218D86AA002DA78F /* matrix.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = matrix.hpp; sourceTree = "<group>"; };
 		55201D9A218D86B3002DA78F /* testint.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = testint.hpp; sourceTree = "<group>"; };
-		55201D9B218D86BA002DA78F /* matrix-manual.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "matrix-manual.pdf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,7 +62,6 @@
 			isa = PBXGroup;
 			children = (
 				55201D8E218D8661002DA78F /* main.cpp */,
-				55201D9B218D86BA002DA78F /* matrix-manual.pdf */,
 				55201D9A218D86B3002DA78F /* testint.hpp */,
 				55201D99218D86AA002DA78F /* matrix.hpp */,
 				55201D96218D869D002DA78F /* AdvanceTest.cpp */,

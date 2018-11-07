@@ -16,13 +16,20 @@ int main(int argc, const char * argv[]) {
     sjtu::Matrix<int> mat = {{1,2,3},{2,3,4},{3,4,5},{4,5,6}};
 //    mat.print();
     mat(1,1) = 100;
-    mat.resize(5, 5, 233);
+    mat.resize(4, 5, 233);
     
     sjtu::Matrix<double> hhh = {{12.5,2.5,3},{2,3,4},{3,4,5},{4,5,6}};
-    hhh.resize(5, 5, 233);
+    hhh.resize(4, 5, 666);
     
-    (hhh -= mat).print();
-//    (mat -= hhh).print();
+//    hhh.print();
+    
+    hhh.print()
+    
+    (hhh - mat).print();
+    
+    hhh.print();
+    
+//    hhh.trans().print();
     
     return 0;
 }

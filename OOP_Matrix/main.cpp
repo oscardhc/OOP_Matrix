@@ -19,7 +19,9 @@ int main(int argc, const char * argv[]) {
     mat.resize(5, 5, 233);
     (-mat).print();
     
-    sjtu::Matrix<double> hhh = {{1.0,2,3},{2,3,4},{3,4,5},{4,5,6}};
+    sjtu::Matrix<double> hhh = {{12.5,2.5,3},{2,3,4},{3,4,5},{4,5,6}};
+    
+    (hhh -= mat).print();
     
     return 0;
 }

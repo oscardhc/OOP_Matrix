@@ -119,17 +119,14 @@ namespace sjtu
             return ret;
         }
         template <class U> Matrix& operator -= (const Matrix<U> b) {
-            if (typeid(T).name()[0] == 'i' && typeid(U).name()[0] == 'd') {
-                Matrix<double> ret = Matrix<double>(N, M);
-                for (int i = 0; i < N; i++) {
-                    for (int j = 0; j < M; j++) {
-                        ret.a.element(i, j) = (double)a.element(i, j) - b(i, j);
-                    }
+            Matrix<double> ret = Matrix<double>(N, M);
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    a.element(i, j) -= (T)b(i, j);
+                    ret.a.element(i, j) = a.element(i, j);
                 }
-                return ret;
-            } else {
-                return this;
             }
+            return ret;
         }
         
 //        3.3.2 BINARY OPERATORS

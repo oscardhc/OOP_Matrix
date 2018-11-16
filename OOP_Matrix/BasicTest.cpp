@@ -451,7 +451,9 @@ std::pair<bool, std::string> testPolicyIterator() {
 
 int main()
 {
+    std::cout << "STARTED" << std::endl;
 	ceTest();
+    std::cout << "FINISHED" << std::endl;
 	std::pair<std::string, std::function<std::pair<bool, std::string>(void)>> testcases[] = {{ "testCtorAssignment", testCtorAssignment },
 																							 { "testSizeEtc",        testSizeEtc },
 																							 { "testOperations",     testOperations },

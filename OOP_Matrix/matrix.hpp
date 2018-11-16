@@ -50,25 +50,13 @@ namespace sjtu
         T* ar;
         
     public:
-        void print() {
-            std::cout << "{";
-            for (int i = 0; i < N; i++) {
-                std::cout << "{" ;
-                for (int j = 0; j < M; j++) {
-                    std::cout << (*this)(i, j) << (j == M-1 ? "": ",");
-                }
-                std::cout << "}" << (i == N-1 ? "}" : ",")  << std::endl;
-            }
-            std::cout << std::endl;
-        }
+//        Matrix();
         
-    public:
-        Matrix() = default;
-        
-        Matrix(size_t n, size_t m, T _init = T())
+        Matrix(size_t n = 1, size_t m = 1, T _init = T())
         {
             N = (int)n;
             M = (int)m;
+//            std::cout << "NE  " << N << " " << M << std::endl;
             ar = new T[N * M];
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < M; j++) {
@@ -81,6 +69,7 @@ namespace sjtu
         {
             N = (int)sz.first;
             M = (int)sz.second;
+//            std::cout << "NE  " << N << " " << M << std::endl;
             ar = new T[N * M];
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < M; j++) {
@@ -93,6 +82,7 @@ namespace sjtu
         {
             N = (int)o.rowLength();
             M = (int)o.columnLength();
+//            std::cout << "NE  " << N << " " << M << std::endl;
             ar = new T[N * M];
             for (int i = 0; i < N * M; i++) {
                 ar[i] = o.element(i);
@@ -104,6 +94,7 @@ namespace sjtu
         {
             N = (int)o.rowLength();
             M = (int)o.columnLength();
+//            std::cout << "NE  " << N << " " << M << std::endl;
             ar = new T[N * M];
             for (int i = 0; i < N * M; i++) {
                 ar[i] = (T)o.element(i);
@@ -127,23 +118,24 @@ namespace sjtu
         {
             N = o.N;
             M = o.M;
-            delete [] ar;
             ar = o.ar;
+            o.ar = nullptr;
         }
         
         Matrix &operator=(Matrix &&o) noexcept
         {
             N = o.N;
             M = o.M;
-            delete [] ar;
             ar = o.ar;
+            o.ar = nullptr;
             return *this;
         }
         
         ~Matrix() {
-            if (ar != NULL) {
+//            std::cout << "DE  " << N << " " << M << std::endl;
+//            print();
+            if (N || M) {
                 delete [] ar;
-                ar = NULL;
             }
         }
         
@@ -151,6 +143,7 @@ namespace sjtu
         {
             N = (int)list.size();
             M = (int)list.begin() -> size();
+//            std::cout << "NE  " << N << " " << M << std::endl;
             ar = new T[N * M];
             auto curRow = list.begin();
             for (int i = 0; i < N; i++, curRow++) {
@@ -190,7 +183,7 @@ namespace sjtu
         
         std::pair<size_t, size_t> size() const
         {
-            return std::make_pair(N, M);
+            return {N, M};
         }
         
         void clear()
@@ -207,10 +200,10 @@ namespace sjtu
         const T& element(int i) const {
             return ar[i];
         }
-        T& operator() (std::size_t i, std::size_t j) {
+        T& operator() (int i, int j) {
             return ar[i * M + j];
         }
-        const T& operator()(std::size_t i, std::size_t j) const {
+        const T& operator()(int i, int j) const {
             return ar[i * M + j];
         }
         
@@ -320,90 +313,123 @@ namespace sjtu
             
             iterator &operator=(const iterator &) = default;
             
+            iterator(pointer _p, size_type _curx, size_type _cury, size_type _mm, size_type _mn): p(_p), curx(_curx), cury(_cury), mm(_mm), mn(_mn) {
+                
+            }
+            
         private:
-
+            pointer p;
+            size_type curx, cury, mm, mn;
             
         public:
             difference_type operator-(const iterator &o)
             {
-                
+                return (curx - o.curx) * mm  + cury - o.cury;
             }
             
             iterator &operator+=(difference_type offset)
             {
-                
+                p += offset;
+                size_type ns = curx * mm + cury + offset;
+                curx = ns / mm;
+                cury = ns % mm;
+                return *this;
             }
             
             iterator operator+(difference_type offset) const
             {
-                
+                pointer np =  p + offset;
+                size_type ns = curx * mm + cury + offset;
+                return iterator(np, ns / mm, ns % mm, mm, mn);
             }
             
             iterator &operator-=(difference_type offset)
             {
-                
+                (*this) += (-offset);
+                return *this;
             }
             
             iterator operator-(difference_type offset) const
             {
-                
+                return (*this) + (-offset);
             }
             
             iterator &operator++()
             {
-                
+                (*this) += 1;
+                return *this;
             }
             
             iterator operator++(int)
             {
-                
+                return (*this) + 1;
             }
             
             iterator &operator--()
             {
-                
+                (*this) -= 1;
+                return *this;
             }
             
             iterator operator--(int)
             {
-                
+                return (*this) - 1;
             }
             
             reference operator*() const
             {
-                
+                return *p;
             }
             
             pointer operator->() const
             {
-                
+                return p;
             }
             
             bool operator==(const iterator &o) const
             {
-                
+                return p == o.p && curx == o.curx && cury == o.cury && mm == o.mm && mn == o.mn;
             }
             
             bool operator!=(const iterator &o) const
             {
-                
+                return !((*this) == o);
             }
         };
         
+        iterator iterAtPos(int i, int j) {
+            return iterator(ar + (i * M + j), i, j, M, N);
+        }
+        
         iterator begin()
         {
-            
+            return iterAtPos(0, 0);
         }
         
         iterator end()
         {
-            
+            return iterAtPos(M - 1, N - 1);
         }
         
         std::pair<iterator, iterator> subMatrix(std::pair<size_t, size_t> l, std::pair<size_t, size_t> r)
         {
-            
+            return {iterAtPos(l.first, l.second), iterAtPos(r.first, r.second)};
         }
+        
+        
+//    public:
+//        void print() {
+//            std::cout << "{";
+//            for (int i = 0; i < N; i++) {
+//                std::cout << "{" ;
+//                for (int j = 0; j < M; j++) {
+//                    std::cout << (*this)(i, j);
+//                    std::cout << 1 << " " ;
+//                }
+//                std::cout << std::endl;
+//            }
+//            std::cout << std::endl;
+//        }
     };
         
 }

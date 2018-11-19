@@ -460,6 +460,7 @@ std::pair<bool, std::string> testPolicyIterator() {
 
 int main()
 {
+    sleep(5);
     std::cout << "STARTED" << std::endl;
 	ceTest();
     std::cout << "FINISHED" << std::endl;
@@ -484,6 +485,6 @@ int main()
 			std::cout << "FAIL. " << information << std::endl;
 		}
 	}
-
+    sleep(100);
 	return 0;
 }

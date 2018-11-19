@@ -182,6 +182,7 @@ std::pair<bool, std::string> exceptionTest()
 
 int main()
 {
+    sleep(10);
 
 	std::pair<std::string, std::function<std::pair<bool, std::string>(void)>> testcases[] = {{ "resizeTest",    resizeTest },
 																							 { "moveTest",      moveTest },
@@ -201,6 +202,7 @@ int main()
 			std::cout << "FAIL. " << information << std::endl;
 		}
 	}
+    sleep(100);
 	return 0;
 }
 

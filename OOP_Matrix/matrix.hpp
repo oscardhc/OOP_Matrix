@@ -159,6 +159,7 @@ namespace sjtu
             for (int i = 0; i < N; i++, curRow++) {
                 auto cur = curRow -> begin();
                 if (curRow -> size() != M) {
+                    delete [] ar;
                     throw std::invalid_argument("init");
                 }
                 for (int j = 0; j < M; j++, cur++) {

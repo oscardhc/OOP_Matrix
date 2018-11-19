@@ -191,6 +191,9 @@ std::pair<bool, std::string> testOperations()
 	};
 
 	a = a = a = a = a;
+    auto hhh = a;
+    hhh = a = hhh = a = hhh;
+    std::cout<<"HHHHH"<<std::endl;
 	// tran
 	try
 	{
@@ -205,20 +208,26 @@ std::pair<bool, std::string> testOperations()
 		return RE("tran");
 	}
 
+    std::cout<<"HHHHH"<<std::endl;
 	// ==, !=
 	try
 	{
+        std::cout<<"23333"<<std::endl;
 		Matrix<long> l(a);
+        std::cout<<"23333"<<std::endl;
 		if (a != l)
 			return WA("!=");
+        std::cout<<"23333"<<std::endl;
 		l.resize(1, 1);
+        std::cout<<"23333"<<std::endl;
 		if (a == l)
 			return WA("==");
+        std::cout<<"23333"<<std::endl;
 	} catch (...)
 	{
 		return RE("==/!=");
 	}
-
+std::cout<<"HHHHH"<<std::endl;
 	// -, *=
 	try
 	{
@@ -239,7 +248,7 @@ std::pair<bool, std::string> testOperations()
 	{
 		return RE("- / *=");
 	}
-
+std::cout<<"HHHHH"<<std::endl;
 	bool thrown = false;
 	// +=, -=
 	try
@@ -262,7 +271,7 @@ std::pair<bool, std::string> testOperations()
 	}
 	if (!thrown)
 		return WA("+=");
-
+std::cout<<"HHHHH"<<std::endl;
 	// +, -, *
 	thrown = false;
 	try

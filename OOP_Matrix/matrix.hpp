@@ -43,7 +43,7 @@ using std::size_t;
 
 namespace sjtu
 {
-    
+
     template <class T>
     class Matrix
     {
@@ -51,7 +51,7 @@ namespace sjtu
         // your private member variables here.
         int N, M;
         T* ar;
-        
+
     public:
         Matrix(size_t n = 1, size_t m = 1, T _init = T())
         {
@@ -64,7 +64,7 @@ namespace sjtu
                 }
             }
         }
-        
+
         explicit Matrix(std::pair<size_t, size_t> sz, T _init = T())
         {
             N = (int)sz.first;
@@ -76,7 +76,7 @@ namespace sjtu
                 }
             }
         }
-        
+
         Matrix(const Matrix &o)
         {
             N = (int)o.rowLength();
@@ -86,7 +86,7 @@ namespace sjtu
                 ar[i] = o.element(i);
             }
         }
-        
+
         template <typename U>
         Matrix(const Matrix<U> &o)
         {
@@ -97,7 +97,7 @@ namespace sjtu
                 ar[i] = (T)o.element(i);
             }
         }
-        
+
         Matrix &operator=(const Matrix &o)
         {
             if (this == &o) return *this;
@@ -110,7 +110,7 @@ namespace sjtu
             }
             return *this;
         }
-        
+
         template <typename U>
         Matrix &operator=(const Matrix<U> &o)
         {
@@ -123,7 +123,7 @@ namespace sjtu
             }
             return *this;
         }
-        
+
         Matrix(Matrix &&o)
         {
             N = o.N;
@@ -131,7 +131,7 @@ namespace sjtu
             ar = o.ar;
             o.ar = nullptr;
         }
-        
+
         Matrix &operator=(Matrix &&o)
         {
             N = o.N;
@@ -142,11 +142,11 @@ namespace sjtu
             o.ar = nullptr;
             return *this;
         }
-        
+
         ~Matrix() {
             if (N || M) delete [] ar;
         }
-        
+
         Matrix(const std::initializer_list<std::initializer_list<T>> &list)
         {
             if (list.size() == 0) {
@@ -167,12 +167,12 @@ namespace sjtu
                 }
             }
         }
-        
+
     public:
         size_t rowLength() const { return N; }
-        
+
         size_t columnLength() const { return M; }
-        
+
         void resize(size_t n, size_t m, T _init = T())
         {
             if (M * N != n * m) {
@@ -195,24 +195,24 @@ namespace sjtu
             N = (int)n;
             M = (int)m;
         }
-        
+
         void resize(std::pair<size_t, size_t> sz, T _init = T())
         {
             resize(sz.first, sz.second, _init);
         }
-        
+
         std::pair<size_t, size_t> size() const
         {
             return {N, M};
         }
-        
+
         void clear()
         {
             if (M || N) delete [] ar;
             N = 0;
             M = 0;
         }
-        
+
     public:
         T& element(int i) {
             return ar[i];
@@ -232,7 +232,7 @@ namespace sjtu
             }
             return ar[i * M + j];
         }
-        
+
         Matrix<T> row(size_t i) const
         {
             if (i < 0 || i >= N) {
@@ -244,7 +244,7 @@ namespace sjtu
             }
             return ret;
         }
-        
+
         Matrix<T> column(size_t j) const
         {
             if (j < 0 || j >= M) {
@@ -256,8 +256,8 @@ namespace sjtu
             }
             return ret;
         }
-        
-        
+
+
     public:
         bool operator==(const Matrix &b) const
         {
@@ -269,12 +269,12 @@ namespace sjtu
             }
             return true;
         }
-        
+
         bool operator!=(const Matrix &b) const
         {
             return !((*this) == b);
         }
-        
+
         Matrix operator-() const
         {
             Matrix<T> ret(N, M);
@@ -285,7 +285,7 @@ namespace sjtu
             }
             return ret;
         }
-        
+
         template <typename U>
         Matrix operator+=(const Matrix<U> &b)
         {
@@ -299,14 +299,14 @@ namespace sjtu
             }
             return *this;
         }
-        
+
         template <typename U>
         Matrix operator-=(const Matrix<U> &b)
         {
             *this += (-b);
             return *this;
         }
-        
+
         template <typename U>
         Matrix operator*=(const U &b)
         {
@@ -317,7 +317,7 @@ namespace sjtu
             }
             return *this;
         }
-        
+
         Matrix tran() const
         {
             Matrix<T> ret(M, N);
@@ -328,7 +328,7 @@ namespace sjtu
             }
             return ret;
         }
-        
+
     public: // iterator
         class iterator
         {
@@ -339,21 +339,21 @@ namespace sjtu
             using reference         = T &;
             using size_type         = size_t;
             using difference_type   = std::ptrdiff_t;
-            
+
             iterator() = default;
-            
+
             iterator(const iterator &) = default;
-            
+
             iterator &operator=(const iterator &) = default;
-            
+
             iterator(pointer _p, size_type _cx, size_type _cy, size_type _dy, size_type _yy): p(_p), cx(_cx), cy(_cy), dy(_dy), yy(_yy) {
-                
+
             }
-            
+
         private:
             pointer p;
             size_type cx, cy, lx, ly, dy, yy;
-            
+
         public:
             void print(){
                 std::cout << cx << " " << cy << " " << dy << " " << yy << std::endl;
@@ -362,7 +362,7 @@ namespace sjtu
             {
                 return (cx - o.cx) * dy + cy - o.cy;
             }
-            
+
             iterator &operator+=(difference_type offset)
             {
                 size_type ns = cx * dy + cy + offset;
@@ -409,47 +409,47 @@ namespace sjtu
                 (*this) -= 1;
                 return *this;
             }
-            
+
             iterator operator--(int)
             {
                 return (*this) - 1;
             }
-            
+
             reference operator*() const
             {
                 return *p;
             }
-            
+
             pointer operator->() const
             {
                 return p;
             }
-            
+
             bool operator==(const iterator &o) const
             {
                 return p == o.p && cx == o.cx && cy == o.cy && dy == o.dy && yy == o.yy;
             }
-            
+
             bool operator!=(const iterator &o) const
             {
                 return !((*this) == o);
             }
         };
-        
+
         iterator iterAtPos(int i, int j) {
             return iterator(ar + (i * M + j), i, j, M, M);
         }
-        
+
         iterator begin()
         {
             return iterAtPos(0, 0);
         }
-        
+
         iterator end()
         {
             return iterAtPos(N, 0);
         }
-        
+
         std::pair<iterator, iterator> subMatrix(std::pair<size_t, size_t> l, std::pair<size_t, size_t> r)
         {
             auto bg = iterator(ar + l.first * M + l.second, 0, 0, r.second - l.second + 1, M);
@@ -473,7 +473,7 @@ namespace sjtu
         }
         return ret;
     }
-    
+
     template <class T, class U>
     Matrix<decltype(U() * T())> operator*(const U &x, const Matrix<T> &a)
     {
@@ -485,7 +485,7 @@ namespace sjtu
         }
         return ret;
     }
-    
+
     template <class U, class V>
     Matrix<decltype(U() * V())> operator*(const Matrix<U> &a, const Matrix<V> &b)
     {
@@ -502,7 +502,7 @@ namespace sjtu
         }
         return ret;
     }
-    
+
     template <class U, class V>
     Matrix<decltype(U() + V())> operator+(const Matrix<U> &a, const Matrix<V> &b)
     {
@@ -517,14 +517,13 @@ namespace sjtu
         }
         return ret;
     }
-    
+
     template <class U, class V>
     Matrix<decltype(U() - V())> operator-(const Matrix<U> &a, const Matrix<V> &b)
     {
         return (a + (-b));
     }
-    
+
 }
 
 #endif //SJTU_MATRIX_HPP
-
